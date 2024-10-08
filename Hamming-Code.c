@@ -3,7 +3,7 @@
 int main()
 {
     int m_size, r = 0, i, j, k;
-    printf("Enter the size of message : ");
+    printf("Enter the size (in bits) of message : ");
     scanf("%d", &m_size);
     while (1)
     {
@@ -12,7 +12,7 @@ int main()
         r++;
     }
     int msg[m_size + 1];
-    printf("enter the message seperated by space : ");
+    printf("Enter the message (seperated by space) : ");
     for (i = m_size; i >= 1; i--)
     {
         scanf("%d", &msg[i]);
@@ -67,8 +67,8 @@ int main()
     {
         printf("%d", data[i]);
     }
-    printf("\n_\n");
-    printf("enter the codeword received : ");
+    printf("\n---\n");
+    printf("Enter the codeword received (Seperated by space): ");
 
     for (i = m_size + r; i >= 1; i--)
     {
@@ -123,10 +123,10 @@ int main()
 
     if (c == 0)
     {
-        printf("no error\n");
+        printf("No error\n");
         return 0;
     }
-    printf("error at position : %d\n", c);
+    printf("Error at position : %d\n", c);
     if (data[c] == 0)
     {
         data[c] = 1;
@@ -135,7 +135,7 @@ int main()
     {
         data[c] = 0;
     }
-    printf("code after error correction is : ");
+    printf("Code after error correction is : ");
     for (i = m_size + r; i >= 1; i--)
     {
         printf("%d", data[i]);
