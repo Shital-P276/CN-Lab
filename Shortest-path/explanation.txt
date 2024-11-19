@@ -1,0 +1,134 @@
+Let's walk through how the simplified Dijkstra's algorithm works step by step.
+
+### Key Concepts:
+1. **Graph Representation:**
+   - We represent the graph using an **adjacency matrix**, where each element at `matrix[i][j]` represents the weight of the edge from vertex `i` to vertex `j`.
+   - An **adjacency list** is used to store the graph more efficiently once it's inputted.
+
+2. **Dijkstra's Algorithm:**
+   - **Objective:** Find the shortest path from a starting vertex to all other vertices in a weighted graph.
+   - **Constraints:** All edge weights must be non-negative.
+
+### Process Flow:
+
+1. **Graph Input:**
+   - We first input the number of vertices and then the names of the vertices (e.g., `A`, `B`, `C`, `D`).
+   - Then, we input the adjacency matrix. For example, for a 4-vertex graph:
+     ```
+     0  1  4  inf
+     1  0  2  5
+     4  2  0  1
+     inf  5  1  0
+     ```
+     This matrix means:
+     - There's an edge from `A` to `B` with weight 1 (`matrix[0][1] = 1`), from `A` to `C` with weight 4 (`matrix[0][2] = 4`), and so on.
+     - `'inf'` means there's no direct edge between those vertices.
+
+2. **Convert Adjacency Matrix to Adjacency List:**
+   - We convert the matrix into an adjacency list. Each vertex points to its neighbors with the corresponding edge weight.
+     Example:
+     ```
+     A -> B(1), C(4)
+     B -> A(1), C(2), D(5)
+     C -> A(4), B(2), D(1)
+     D -> B(5), C(1)
+     ```
+
+3. **Initialization for Dijkstra's Algorithm:**
+   - **Distances:** We initialize the distance to the start vertex as `0` (since the shortest path from a vertex to itself is zero) and set the distances to all other vertices as `inf` (infinity), meaning they are initially unreachable.
+     - Example: If we start from `A`, the distances dictionary will be:
+       ```
+       {A: 0, B: inf, C: inf, D: inf}
+       ```
+   - **Unvisited Vertices:** A list of all vertices that have not been visited yet. We start with all the vertices in the graph.
+
+4. **Algorithm Execution:**
+   - The algorithm proceeds in iterations, where in each iteration:
+     - **Step 1:** Select the vertex with the smallest distance (i.e., the "current" vertex). Initially, this will be the start vertex (e.g., `A`).
+     - **Step 2:** For the current vertex, check each of its neighbors. If the path to the neighbor through the current vertex is shorter than the known distance to that neighbor, update the distance.
+     - **Step 3:** Once the current vertex's neighbors are processed, mark the vertex as visited (remove it from the `unvisited_vertices` list).
+     - **Step 4:** Repeat until all vertices have been visited or there are no reachable vertices left (i.e., all remaining vertices have distance `inf`).
+
+5. **Final Step:**
+   - Once all vertices are visited, the `distances` dictionary holds the shortest path distances from the starting vertex to every other vertex in the graph.
+
+### Detailed Example:
+
+Let's take a simple example to explain the working.
+
+Consider a graph with 4 vertices `A`, `B`, `C`, and `D` and the following adjacency matrix:
+
+```
+   A    B    C    D
+A [ 0,   1,   4,   inf ]
+B [ 1,   0,   2,   5   ]
+C [ 4,   2,   0,   1   ]
+D [ inf, 5,   1,   0   ]
+```
+
+### 1. **Convert to Adjacency List:**
+
+After converting the adjacency matrix to an adjacency list, the graph looks like this:
+
+```
+A -> B(1), C(4)
+B -> A(1), C(2), D(5)
+C -> A(4), B(2), D(1)
+D -> B(5), C(1)
+```
+
+### 2. **Initialize:**
+- Start vertex: `A`
+- Distances (initial): `{A: 0, B: inf, C: inf, D: inf}`
+- Unvisited vertices: `['A', 'B', 'C', 'D']`
+
+### 3. **First Iteration:**
+- **Current vertex:** `A` (because it has the smallest distance of 0).
+- **Neighbors of A:** 
+  - `B` has a distance of `0 + 1 = 1`. Update distance for `B` to `1`.
+  - `C` has a distance of `0 + 4 = 4`. Update distance for `C` to `4`.
+- **Updated distances:** `{A: 0, B: 1, C: 4, D: inf}`
+- **Unvisited vertices:** `['B', 'C', 'D']`
+
+### 4. **Second Iteration:**
+- **Current vertex:** `B` (because it has the smallest distance of 1).
+- **Neighbors of B:**
+  - `A` already visited.
+  - `C` has a distance of `1 + 2 = 3`. Update distance for `C` to `3` (since it's smaller than the previous distance of `4`).
+  - `D` has a distance of `1 + 5 = 6`. Update distance for `D` to `6`.
+- **Updated distances:** `{A: 0, B: 1, C: 3, D: 6}`
+- **Unvisited vertices:** `['C', 'D']`
+
+### 5. **Third Iteration:**
+- **Current vertex:** `C` (because it has the smallest distance of 3).
+- **Neighbors of C:**
+  - `A` already visited.
+  - `B` already visited.
+  - `D` has a distance of `3 + 1 = 4`. Update distance for `D` to `4` (since it's smaller than `6`).
+- **Updated distances:** `{A: 0, B: 1, C: 3, D: 4}`
+- **Unvisited vertices:** `['D']`
+
+### 6. **Final Iteration:**
+- **Current vertex:** `D` (the last vertex).
+- Since all its neighbors have already been visited, we end the algorithm.
+
+### 7. **Final Distances:**
+The final shortest path distances from `A` to all other vertices are:
+```
+A -> A: 0
+A -> B: 1
+A -> C: 3
+A -> D: 4
+```
+
+### Summary of Steps:
+1. Initialize all vertices with infinite distance except the start vertex (set to 0).
+2. Repeatedly choose the unvisited vertex with the smallest distance.
+3. Update the distances of its neighbors if a shorter path is found.
+4. Mark the current vertex as visited.
+5. Repeat until all vertices are visited or no further updates can be made.
+6. The `distances` dictionary contains the shortest path from the start vertex to all other vertices.
+
+### Why This Works:
+- Dijkstra’s algorithm works by always choosing the "greedy" choice: visiting the closest unvisited vertex first and updating its neighbors.
+- The algorithm guarantees that once a vertex is visited, its shortest distance has been determined, ensuring that the final result is the shortest path to each vertex.
