@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <limits.h>
-#define V 100 // Maximum number of vertices
+#define V 100 
 
 // Function to find the vertex with minimum distance value
 int minDistance(int dist[], int visited[], int vertices) {
